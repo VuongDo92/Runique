@@ -124,7 +124,7 @@ fun RuniquePasswordTextField(
                                 text = hint,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
                         }
-                        innerBox
+                        innerBox()
                     }
                     IconButton(onClick = onTogglePasswordVisibility) {
                         Icon(
@@ -148,8 +148,8 @@ fun RuniquePasswordTextField(
 private fun RuniquePasswordTextFieldPreview() {
     RuniqueTheme {
         RuniquePasswordTextField(
-            state = rememberTextFieldState(),
-            hint = "example@gmail.com",
+            state = rememberTextFieldState("Tuanvuong@123"),
+            hint = "Tuanvuong@123",
             title = "Password",
             isPasswordVisible = false,
             onTogglePasswordVisibility = {},

@@ -136,7 +136,7 @@ fun RuniqueTextField(
                                 text = hint,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
                         }
-                        innerBox
+                        innerBox()
                     }
                     if(endIcon != null) {
                         Spacer(modifier = Modifier.width(16.dp))
@@ -153,7 +153,7 @@ fun RuniqueTextField(
 private fun RuniqueTextFieldPreview() {
     RuniqueTheme {
         RuniqueTextField(
-            state = rememberTextFieldState(),
+            state = rememberTextFieldState("test@gmail.com"),
             startIcon = EmailIcon,
             endIcon = CheckIcon,
             hint = "example@gmail.com",

@@ -2,6 +2,7 @@
 
 package com.plcoding.auth.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,6 +49,7 @@ import com.plcoding.core.presentation.designsystem.components.GradientBackground
 import com.plcoding.core.presentation.designsystem.components.RuniqueActionButton
 import com.plcoding.core.presentation.designsystem.components.RuniquePasswordTextField
 import com.plcoding.core.presentation.designsystem.components.RuniqueTextField
+import com.plcoding.core.presentation.ui.ObserveAsEvents
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -54,6 +58,24 @@ fun RegisterScreenRoot(
     onSuccessfulRegistration: () -> Unit,
     viewModel: RegisterViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    ObserveAsEvents(flow = viewModel.events) { events->
+        when(events) {
+            is RegisterEvent.Error -> {
+                keyboardController?.hide()
+                Toast.makeText(context, events.error.asString(context), Toast.LENGTH_LONG).show()
+
+            }
+            RegisterEvent.RegistrationSuccess -> {
+                keyboardController?.hide()
+                Toast.makeText(context,
+                    R.string.registration_successful,
+                    Toast.LENGTH_LONG).show()
+                onSuccessfulRegistration()
+            }
+        }
+    }
     RegisterScreen(
         state = viewModel.state,
         onAction = viewModel::onAction
@@ -165,7 +187,6 @@ private fun RegisterScreen(
                     onAction(RegisterAction.OnRegisterClick)
                 }
             )
-
         }
     }
 }
@@ -199,7 +220,7 @@ private fun RegisterStateScreenPreview() {
     RuniqueTheme {
         RegisterScreen(
             state = RegisterState(
-                passwordValidationState = PasswordValidationState(
+                    passwordValidationState = PasswordValidationState(
                     hasLowerCaseCharacter = true,
                     hasUpperCaseCharacter = true,
                     hasMinLength = true
