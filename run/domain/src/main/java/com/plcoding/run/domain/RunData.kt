@@ -1,0 +1,11 @@
+package com.plcoding.run.domain
+
+import com.plcoding.core.domain.location.LocationTimestamp
+import kotlin.time.Duration
+
+
+data class RunData(
+    val distanceMeters: Int = 0,
+    val pace: Duration = Duration.ZERO, // how long to reach one kilometer
+    val locations: List<List<LocationTimestamp>> = emptyList()
+)
